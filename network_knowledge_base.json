@@ -1,0 +1,30 @@
+{
+    "vendors": {
+        "F6:94:6E": "Huawei Technologies (AIS Fiber)",
+        "28:EE:52": "Huawei Device",
+        "3C:64:CF": "TP-Link",
+        "AC:BC:32": "Apple, Inc.",
+        "00:0C:29": "VMware, Inc.",
+        "00:50:56": "VMware, Inc.",
+        "B8:27:EB": "Raspberry Pi Foundation",
+        "D8:3A:DD": "Ubiquiti Networks"
+    },
+    "ports": {
+        "21": "FTP (File Transfer)",
+        "22": "SSH (Secure Shell)",
+        "23": "Telnet",
+        "25": "SMTP (Email)",
+        "53": "DNS",
+        "80": "HTTP (Web)",
+        "110": "POP3",
+        "143": "IMAP",
+        "443": "HTTPS (Secure Web)",
+        "445": "SMB (Windows File Share)",
+        "3306": "MySQL Database",
+        "3389": "RDP (Remote Desktop)",
+        "5432": "PostgreSQL",
+        "8000": "HTTP-ALT (Dev Server)",
+        "8080": "HTTP-Proxy / Web Cache",
+        "8443": "HTTPS-ALT"
+    }
+}
