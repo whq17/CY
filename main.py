@@ -44,7 +44,7 @@ BORDER_COLOR = "#373A40"    # สีเส้นขอบ
 class SecurityInspectorGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("[SYS.ADMIN] // VULNERABILITY_SCANNER_G5")
+        self.root.title("[DEFENSE.OPS] // DEFENSIVE_SECURITY_SENTINEL")
         self.root.geometry("1450x900")
         self.root.configure(bg=BG_MAIN)
 
@@ -104,8 +104,8 @@ class SecurityInspectorGUI:
         # Logo / Title in Sidebar
         logo_frame = tk.Frame(self.sidebar, bg=BG_SIDEBAR, pady=30)
         logo_frame.pack(fill="x")
-        tk.Label(logo_frame, text="🛡️ CYBER OPS", font=("Consolas", 18, "bold"), fg=TEXT_BRIGHT, bg=BG_SIDEBAR).pack()
-        tk.Label(logo_frame, text="VULN_SCANNER_G5", font=("Consolas", 8), fg=ACCENT_CYAN, bg=BG_SIDEBAR).pack()
+        tk.Label(logo_frame, text="🛡️ DEFENSE OPS", font=("Consolas", 18, "bold"), fg=TEXT_BRIGHT, bg=BG_SIDEBAR).pack()
+        tk.Label(logo_frame, text="DEFENSIVE_SECURITY_SENTINEL", font=("Consolas", 8), fg=ACCENT_CYAN, bg=BG_SIDEBAR).pack()
 
         # Input Field in Sidebar
         tk.Label(self.sidebar, text="TARGET IP RANGE", font=("Segoe UI", 8, "bold"), fg=TEXT_DIM, bg=BG_SIDEBAR).pack(anchor="w", padx=25, pady=(20, 5))
@@ -150,7 +150,7 @@ class SecurityInspectorGUI:
         table_container = tk.Frame(main_view, bg=BORDER_COLOR, pady=1, padx=1)
         table_container.pack(fill="both", expand=True)
 
-        cols = ("Status", "IP Address", "MAC / Vendor", "Port & Service", "Banner Data", "Risk Level")
+        cols = ("Status", "IP Address", "MAC / Vendor", "Port & Service", "Banner Data", "Risk / OWASP Mapping")
         self.tree = ttk.Treeview(table_container, columns=cols, show="headings")
         for col in cols: self.tree.heading(col, text=col.upper())
         
@@ -159,7 +159,7 @@ class SecurityInspectorGUI:
         self.tree.column("IP Address", width=120, anchor="center")
         self.tree.column("MAC / Vendor", width=200)
         self.tree.column("Port & Service", width=160)
-        self.tree.column("Risk Level", width=300)
+        self.tree.column("Risk / OWASP Mapping", width=460)
 
         # Tags for coloring
         self.tree.tag_configure("safe", foreground=MATRIX_GREEN)
@@ -225,9 +225,9 @@ class SecurityInspectorGUI:
                             if s.connect_ex((ip, port)) == 0:
                                 found_ports = True
                                 banner = get_banner(ip, port)
-                                risk, is_critical = vuln_db.check_vulnerability(banner, port)
-                                self.queue.put((ip, mac, vendor, f"Port {port}", banner, risk, is_critical))
-                                if is_critical: notifier.send_alert(ip, vendor, f"Port {port}", banner, risk)
+                                risk, is_critical, service = vuln_db.check_vulnerability(banner, port)
+                                self.queue.put((ip, mac, vendor, f"Port {port} ({service})", banner, risk, is_critical))
+                                if is_critical: notifier.send_alert(ip, vendor, f"Port {port} ({service})", banner, risk)
                     except: pass
                 if not found_ports:
                     self.queue.put((ip, mac, vendor, "Safe", "-", "SECURE", False))
@@ -308,7 +308,7 @@ class SecurityInspectorGUI:
         if path:
             with open(path, 'w', newline='', encoding='utf-8-sig') as f:
                 writer = csv.writer(f)
-                writer.writerow(["Status", "IP", "Vendor", "Port", "Banner", "Risk"])
+                writer.writerow(["Status", "IP", "Vendor", "Port & Service", "Banner", "Risk / OWASP Mapping"])
                 for c in self.tree.get_children(): writer.writerow(self.tree.item(c)['values'])
             messagebox.showinfo("Export", "Report generated successfully.")
 
